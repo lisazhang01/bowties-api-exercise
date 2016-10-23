@@ -20,7 +20,7 @@ class API::BowtiesController < ApplicationController
     @bowtie = Bowtie.new(bowtie_params)
 
     if @bowtie.save
-      render json: @bowtie, status: 201, location: [:api, bowtie]
+      render json: @bowtie, status: 201, location: [:api, bowties_path]
     else
       render json: @bowtie.errors.messages, status: 400
     end
@@ -45,7 +45,7 @@ class API::BowtiesController < ApplicationController
 
 private
   def bowtie_params
-    params.require(:bowtie).permit(:material, :pattern, :style, :image_url, :wholesale_price, :retail_price)
+    params.permit(:material, :pattern, :style, :image_url, :wholesale_price, :retail_price)
   end
 
   def set_bowties
