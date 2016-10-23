@@ -5,60 +5,49 @@ $(document).ready(function (){
     var newElem = "";
 
     for (var i = 0; i < bowties.length; i++) {
-      newElem += '<div class="col-sm-6 col-md-4   menu"><div class="thumbnail"><img src="" alt=""><div class="caption">' +
-                    '<h3>' +
-                      bowties[i].material +
-                      ' - ' +
-                      bowties[i].pattern +
-                    '</h3>' +
-                  '<p>...</p><p><button type="button" class="btn btn-primary btn-lg more" data-toggle="modal" data-target="#myModal">More</button></p></div></div></div>';
+      newElem += '<div class="col-sm-6 col-md-4 menu"><a href="#" class="thumbnail"><img src="" alt=""><div class="caption">' +
+        '<h3>' +
+        bowties[i].material +
+        ' - ' +
+        bowties[i].pattern +
+        '</h3>' +
+        '<p>...</p><div class="profile hide"><ul><li>'+bowties[i].style +
+        '</li><li> $ ' +
+        bowties[i].retail_price +
+        '</li></ul></div><button type="button" class="btn btn-primary btn-lg more" data-target="#myModal">More</button></div></div></div>';
+
     }
 
-    newElem = '<div class="row">' + newElem + '</div>';
+    // allElem = '<div class="row">' + newElem + '</div>';
 
-    $('.container').append(newElem);
+    $('.bowties').append(newElem);
   };
 
-//Get json of all bowties from /api/bowties and redner in index
+
+//Show details of one bowtie in modal
+  function showDetails() {
+    var infoModal = $('#myModal');
+    $('.thumbnail').on('click', function(){
+      var htmldata = $(this).find('.profile').html();
+      infoModal.find('.modal-body').html(htmldata);
+      infoModal.modal('show');
+      return false;
+    })
+  };
+
+//Get json of all bowties from /api/bowties and render in index
   $.ajax({
     url: '/api/bowties',
     method: 'GET'
   }).done(function(resp){
     generateIndex(resp);
+    showDetails();
   });
 
-//Render one bowtie in modal
-  var generateBowtie = function(bowtie) {
-    var showOne = "";
-
-    showOne = '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">' +bowtie.material +
-      ' - ' +
-      bowtie.pattern +
-      '</h4></div><div class="modal-body">' +
-      "Style: " + bowtie.style +
-      "$ " + bowtie.retail_price +
-      '</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary">Edit</button></div></div></div></div>'
-
-    $('body').append(bowtie);
-  };
 
 
-  $('.more').click(function(e) {
-    e.preventDefault();
-    var bowtie = <%= %>;
-
-    $.ajax({
-      url: '/api/bowties',
-      method: 'GET'
-    }).done(function(resp){
-      generateBowtie(resp);
-    });
-
-
-  })
-
-
-}); //end doc ready
+});
+//end doc ready
 
 
 
